@@ -1,4 +1,4 @@
-import java.io.*;
+/*import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -76,6 +76,51 @@ public class Main {
         String line;
         while((line = bufferedReader.readLine()) != null){
             System.out.println(line);
+        }
+    }
+}*/
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class Main {
+
+    public static final String OUTPUT_FILE_FORMAT = "%d %s %d = %.2f\n";
+
+    public static void main(String[] args) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("input.txt"));
+
+        try (FileWriter fileWriter = new FileWriter("output.txt")) {
+            for (String line : lines) {
+                String[] splitElements = line.split(" ");
+                String operation = splitElements[splitElements.length - 1];
+                int firstNum = Integer.parseInt(splitElements[0]);
+                int secondNum = Integer.parseInt(splitElements[1]);
+
+                float result;
+                switch (operation) {
+                    case "+":
+                        result = firstNum + secondNum;
+                        break;
+                    case "-":
+                        result = firstNum - secondNum;
+                        break;
+                    case "*":
+                        result = firstNum * secondNum;
+                        break;
+                    case "/":
+                        result = (float) firstNum / secondNum;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown operation");
+                }
+
+                fileWriter.append(String.format(OUTPUT_FILE_FORMAT, firstNum, operation, secondNum, result));
+            }
+
         }
     }
 }
