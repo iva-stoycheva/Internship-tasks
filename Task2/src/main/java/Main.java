@@ -35,10 +35,8 @@ public class Main {
                     default:
                         throw new IllegalArgumentException("Unknown operation");
                 }
-
                 fileWriter.append(String.format(OUTPUT_FILE_FORMAT, firstNum, operation, secondNum, result));
             }
-
         }
     }
 }
