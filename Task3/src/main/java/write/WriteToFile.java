@@ -12,34 +12,34 @@ public class WriteToFile {
     public void write(String inputFile) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(inputFile));
         File file = new File(inputFile);
-
-        try (FileWriter fileWriter = new FileWriter(file, true)) {
+        try (FileWriter fileWriter = new FileWriter(file, true)){
             for (String line : lines) {
                 String[] splitElements = line.split(" ");
                 int firstNum = Integer.parseInt(splitElements[0]);
                 String operation = splitElements[1];
                 int secondNum = Integer.parseInt(splitElements[2]);
 
-                float result;
-                switch (operation) {
-                    case "+":
-                        result = firstNum + secondNum;
-                        break;
-                    case "-":
-                        result = firstNum - secondNum;
-                        break;
-                    case "*":
-                        result = firstNum * secondNum;
-                        break;
-                    case "/":
-                        result = (float) firstNum / secondNum;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown operation");
-                }
+                float result = operation(firstNum, operation, secondNum);
                 fileWriter.append(String.format(OUTPUT_FILE_FORMAT, firstNum, operation, secondNum, result));
             }
         }
+    }
+
+    public static float operation(int firstNum, String operator,  int secondNum) {
+        switch (operator) {
+            case "+":
+                return firstNum + secondNum;
+            case "-":
+                return firstNum - secondNum;
+            case "*":
+                return firstNum * secondNum;
+            case "/":
+                if (secondNum == 0)
+                    throw new
+                            UnsupportedOperationException("Cannot divide by zero");
+                return firstNum / secondNum;
+        }
+        return 0;
     }
 }
     /*public void write(String inputFile) throws IOException {
