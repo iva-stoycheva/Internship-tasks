@@ -17,13 +17,18 @@ public class WriteToFile {
 
             while ((line=bufferedReader.readLine()) != null) {
 
+                StringBuffer sb = new StringBuffer(line);
+
                 line=line.substring(0, line.length()-3);
 
                 StringTokenizer stringTokenizer = new StringTokenizer(line, "\\ |\\=|\\?");
                 Stack<Integer> values = new Stack<Integer>();
                 Stack<Character> ops = new Stack<Character>();
 
-                bufferedWriter.append(line + " = " + Tokens.evaluate(stringTokenizer, values, ops) + "\n");
+                while(!ops.empty()) {
+                    values.push(Operation.apply(ops.pop(), values.pop(), values.pop()));
+                    bufferedWriter.append(sb.toString() + values.pop());
+                }
             }
         }
     }

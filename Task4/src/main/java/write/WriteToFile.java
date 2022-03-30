@@ -23,7 +23,7 @@ public class WriteToFile {
                 Stack<Integer> values = new Stack<Integer>();
                 Stack<Character> ops = new Stack<Character>();
 
-                bufferedWriter.append(line + " = " + Tokens.evaluate(stringTokenizer, values, ops) + "\n");
+                bufferedWriter.append(line + " = " + Tokens.convertToStack(stringTokenizer, values, ops) + "\n");
             }
         }
     }
