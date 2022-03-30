@@ -12,9 +12,9 @@ public class WriteToFile {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
 
-            while ((line=bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
 
-                line=line.substring(0, line.length()-3);
+                line = line.substring(0, line.length() - 3);
 
                 StringTokenizer stringTokenizer = new StringTokenizer(line, "\\ |\\=|\\?");
                 Stack<Integer> values = new Stack<Integer>();
