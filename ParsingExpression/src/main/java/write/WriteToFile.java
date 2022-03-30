@@ -10,7 +10,6 @@ public class WriteToFile {
     public void write(String inputFile) throws IOException {
         File file = new File(inputFile);
         String line;
-        ReadFile readFile=new ReadFile();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
@@ -18,19 +17,22 @@ public class WriteToFile {
             while ((line=bufferedReader.readLine()) != null) {
 
                 StringBuffer sb = new StringBuffer(line);
-
-                line=line.substring(0, line.length()-3);
+                sb.deleteCharAt(sb.length() - 1);
 
                 StringTokenizer stringTokenizer = new StringTokenizer(line, "\\ |\\=|\\?");
+
                 Stack<Integer> values = new Stack<Integer>();
                 Stack<Character> ops = new Stack<Character>();
 
-                while(!ops.empty()) {
+                Tokens.convertToStack(stringTokenizer, values, ops);
+
+                while (!ops.empty()) {
                     values.push(Operation.apply(ops.pop(), values.pop(), values.pop()));
-                    bufferedWriter.append(sb.toString() + values.pop());
+                    bufferedWriter.append(sb.toString() + values.pop() + "\n");
                 }
             }
         }
     }
 }
+
 
