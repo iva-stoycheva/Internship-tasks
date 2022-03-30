@@ -1,34 +1,31 @@
 package write;
 
+import read.ReadFile;
+
 import java.io.*;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class WriteToFile {
     public void write(String inputFile) throws IOException {
         File file = new File(inputFile);
         String line;
-        String finalString = "";
+        ReadFile readFile=new ReadFile();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
 
-            while ((line = bufferedReader.readLine()) != null) {
-                finalString = line;
-                StringBuffer sb = new StringBuffer(finalString);
-                sb.deleteCharAt(sb.length() - 1);
-                finalString = sb.toString();
+            while ((line=bufferedReader.readLine()) != null) {
 
-                char[] tokens = finalString.toCharArray();
+                line=line.substring(0, line.length()-3);
+
+                StringTokenizer stringTokenizer = new StringTokenizer(line, "\\ |\\=|\\?");
                 Stack<Integer> values = new Stack<Integer>();
                 Stack<Character> ops = new Stack<Character>();
 
-                Tokens.tokensToStack(tokens, values, ops);
-
-                while (!ops.empty()) {
-                    values.push(Operation.applyOp(ops.pop(), values.pop(), values.pop()));
-                    bufferedWriter.append(finalString + values.pop() + "\n");
-                }
+                bufferedWriter.append(line + " = " + Tokens.evaluate(stringTokenizer, values, ops) + "\n");
             }
         }
     }
 }
+

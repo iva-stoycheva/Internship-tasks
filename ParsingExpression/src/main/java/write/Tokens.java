@@ -1,30 +1,30 @@
 package write;
 
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 public class Tokens {
-    public static void tokensToStack(char[] tokens, Stack<Integer> values, Stack<Character> ops) {
-        for (int i = 0; i < tokens.length; i++) {
-
-            if (tokens[i] == ' ')
-                continue;
-
-            if (tokens[i] >= '0' && tokens[i] <= '9') {
-                StringBuffer sbuf = new StringBuffer();
-
-                while (i < tokens.length && tokens[i] >= '0' && tokens[i] <= '9') {
-                    sbuf.append(tokens[i++]);
-                }
-
-                values.push(Integer.parseInt(sbuf.toString()));
-
-            } else if (tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/') {
-
+    public static int evaluate(StringTokenizer stringTokenizer, Stack<Integer> values, Stack<Character> ops) {
+        while (stringTokenizer.hasMoreTokens()) {
+            String str = stringTokenizer.nextToken();
+            if (str.matches("\\d+")) {
+                values.push(Integer.parseInt(str));
+            }
+            else {
                 while (!ops.empty()) {
-                    values.push(Operation.applyOp(ops.pop(), values.pop(), values.pop()));
+                    values.push(Operation.apply(ops.pop(), values.pop(), values.pop()));
                 }
-                ops.push(tokens[i]);
+                ops.push(str.charAt(0));
             }
         }
+        while(!ops.empty()){
+            values.push(Operation.apply(ops.pop(), values.pop(), values.pop()));
+        }
+        return values.pop();
     }
 }
+
+
+
+
+
