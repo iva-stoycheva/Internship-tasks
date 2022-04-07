@@ -16,7 +16,7 @@ public class InfixToPostfix {
             value2 = 2;
         }
 
-        return value1 > value2;
+        return (value1 < value2) ? false : true;
     }
 
     public static String convert(String infixExp) {

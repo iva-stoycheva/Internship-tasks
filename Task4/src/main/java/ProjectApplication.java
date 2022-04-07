@@ -18,7 +18,7 @@ public class ProjectApplication {
                 bufferedWriter.append(line.replace("?", result + "\n"));
             }
         }
-        inputFile.renameTo(new File("inputNew.txt"));
+        inputFile.renameTo(new File("conditions.txt"));
         outputFile.renameTo(new File("input.txt"));
     }
 }

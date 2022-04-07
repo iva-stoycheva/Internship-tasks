@@ -9,16 +9,27 @@ public class Calculations {
                 values.push(Integer.valueOf(token));
                 continue;
             }
+
             int firstOperand = values.pop();
             int secondOperand = values.pop();
-            if (token.equals("+")) {
-                values.push(secondOperand + firstOperand);
-            } else if (token.equals("-")) {
-                values.push(secondOperand - firstOperand);
-            } else if (token.equals("*")) {
-                values.push(secondOperand * firstOperand);
-            } else {
-                values.push(secondOperand / firstOperand);
+
+            switch (token) {
+                case "+": {
+                    values.push(secondOperand + firstOperand);
+                    break;
+                }
+                case "-": {
+                    values.push(secondOperand - firstOperand);
+                    break;
+                }
+                case "*": {
+                    values.push(secondOperand * firstOperand);
+                    break;
+                }
+                case "/": {
+                    values.push(secondOperand / firstOperand);
+                    break;
+                }
             }
         }
         return values.pop();
