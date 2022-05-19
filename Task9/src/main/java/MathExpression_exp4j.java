@@ -1,9 +1,9 @@
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-public class MathExpression {
+public class MathExpression_exp4j {
     public static double evaluate(String str) {
-        Expression expression = new ExpressionBuilder(str).build();
-        return expression.evaluate();
+        Expression exp = new ExpressionBuilder(str).build();
+        return exp.evaluate();
     }
 }
