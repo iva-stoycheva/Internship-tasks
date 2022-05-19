@@ -1,7 +1,7 @@
 import java.util.Stack;
 
 public class RPN {
-    public static int evaluateRPN(String[] tokens) {
+    public static int evaluate(String[] tokens) {
         Stack<Integer> values = new Stack<>();
         String operators = "+-*/";
         for (String token : tokens) {
