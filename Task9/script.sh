@@ -1,1 +1,4 @@
-#!/bin/bash
+#!/bin/sh
+VAR_1_NAME=x
+CALC_VAR_1_VALUE=10
+echo "$CALC_VAR_1_VALUE+2"
