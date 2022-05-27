@@ -14,13 +14,13 @@ public class Calculator {
             Expression expression1 = new ExpressionBuilder(onlyOperandsAndOperators).build();
             System.out.println("Result: " + expression1.evaluate());
 
-            String calculationEngine = System.getProperty("expression");
-            System.out.println(calculationEngine);
-            String onlyOperandsAndOperatorsForProperty = calculationEngine.substring(0, calculationEngine.indexOf("="));
+            System.out.println("Enter expression with unknown variables: ");
+            String calculationEngine = scanner.nextLine();
+            String onlyOperandsAndOperatorsWithUnknownVariable = calculationEngine.substring(0, calculationEngine.indexOf("="));
 
             Map<String, Float> variables = Variables.read();
             var variableEntries = variables.entrySet();
-            Expression expression2 = new ExpressionBuilder(onlyOperandsAndOperatorsForProperty)
+            Expression expression2 = new ExpressionBuilder(onlyOperandsAndOperatorsWithUnknownVariable)
                     .variables("x", "y", "z", "k")
                     .build();
             for (Map.Entry<String, Float> variableEntry : variableEntries) {
