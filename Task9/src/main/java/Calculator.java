@@ -1,26 +1,37 @@
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Calculator {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         try {
+            System.out.println("Enter math expression to be calculated: ");
+            String mathExpression = "";
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Еnter math expression in binary, octal, decimal or hexadecimal: ");
-            String str = scanner.nextLine();
-            String mathExp = str.substring(0, str.indexOf("="));
+            mathExpression = scanner.nextLine();
+            String onlyOperandsAndOperators = mathExpression.substring(0, mathExpression.indexOf("="));
+            Expression expression1 = new ExpressionBuilder(onlyOperandsAndOperators).build();
+            System.out.println("Result: " + expression1.evaluate());
 
-            String calculationEngine = System.getenv("calculationEngine");
-            if (calculationEngine.equals("rpn")) {
-                String[] strArray = InfixToPostfix.convert(mathExp).split("\\s+");
-                int result = RPN.evaluate(strArray);
-                System.out.println(result);
+            String calculationEngine = System.getProperty("expression");
+            System.out.println(calculationEngine);
+            String onlyOperandsAndOperatorsForProperty = calculationEngine.substring(0, calculationEngine.indexOf("="));
+
+            Map<String, Float> variables = Variables.read();
+            var variableEntries = variables.entrySet();
+            Expression expression2 = new ExpressionBuilder(onlyOperandsAndOperatorsForProperty)
+                    .variables("x", "y", "z", "k")
+                    .build();
+            for (Map.Entry<String, Float> variableEntry : variableEntries) {
+                variableEntry.setValue(variableEntry.getValue());
+                expression2.setVariable(variableEntry.getKey(), variableEntry.getValue());
             }
-            else if (calculationEngine.equals("mXparser")){
-                MathExpression_mXparser.evaluate(mathExp);
-            }
-            else {
-                System.out.println("Unknown calculation engine: " + calculationEngine);
-            }
-        } catch (Exception e) {
+
+            System.out.println(variableEntries);
+            System.out.println("Result: " + expression2.evaluate());
+
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
