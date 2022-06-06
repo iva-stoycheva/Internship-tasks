@@ -8,10 +8,10 @@ public class Calculator {
             memoryService.insertIntoM(mathExp1);
 
             String mathExp2 = memoryService.input();
-            memoryService.insertIntoMplus(mathExp2);
+            memoryService.insertResultFromCalculations(mathExp2);
 
             String mathExp3 = memoryService.input();
-            memoryService.insertIntoMminus(mathExp3);
+            memoryService.insertResultFromCalculations(mathExp3);
 
             memoryService.selectMemoryResult();
         } catch (Exception e) {
