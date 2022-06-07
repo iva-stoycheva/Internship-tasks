@@ -5,8 +5,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class MemoryService {
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/memory_infodb?useSSL=false&allowPublicKeyRetrieval=true" +
-            "&serverTimezone=UTC";
+    public static final String URL = "jdbc:h2:~/memory";
     public static final String USER = "root";
     public static final String PASSWORD = "123456";
     public String mathExpression;
@@ -20,9 +19,8 @@ public class MemoryService {
     }
 
     public void insertIntoM(String mathExp) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-        Statement statement = connection.createStatement();
+        Class.forName("org.h2.Driver");
+        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
         double M;
         String onlyOperatorsAndOperands = mathExp.substring(0, mathExp.indexOf("="));
         Expression expression = new ExpressionBuilder(onlyOperatorsAndOperands).build();
@@ -38,47 +36,42 @@ public class MemoryService {
     }
 
     public void insertResultFromCalculations(String mathExp) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-        for (int i = 0; i < mathExp.length(); i++) {
-            if (mathExp.charAt(i) == 'M') {
-                String replacement = "";
-                String selection = "SELECT M FROM memory";
-                Statement st = connection.createStatement();
-                ResultSet rs = st.executeQuery(selection);
-                if (rs.next()) {
-                    replacement = mathExp.replace("M", rs.getString(1));
-                }
-                if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M+")) {
-                    String onlyOperatorsAndOperands2 = replacement.substring(0, replacement.indexOf("="));
-                    Expression expression2 = new ExpressionBuilder(onlyOperatorsAndOperands2).build();
-                    String insertion2 = "INSERT INTO memory(M)" +
-                            "VALUES (?)";
-                    PreparedStatement prest2 = connection.prepareStatement(insertion2);
-                    prest2.setDouble(1, rs.getDouble(1) + expression2.evaluate());
-                    prest2.executeUpdate();
-                }
-                else if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M-")) {
-                    String onlyOperatorsAndOperands3 = replacement.substring(0, replacement.indexOf("="));
-                    Expression expression3 = new ExpressionBuilder(onlyOperatorsAndOperands3).build();
-                    String insertion3 = "INSERT INTO memory(M)" +
-                            "VALUES (?)";
-                    String selection3 = "SELECT M FROM memory ORDER BY id DESC LIMIT 1";
-                    ResultSet resultSet = st.executeQuery(selection3);
-                    PreparedStatement prest3 = connection.prepareStatement(insertion3);
-                    while (resultSet.next()) {
-                        prest3.setDouble(1, resultSet.getDouble(1) - expression3.evaluate());
-                        prest3.executeUpdate();
-                    }
-                }
+        Class.forName("org.h2.Driver");
+        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        if (mathExp.substring(0, mathExp.indexOf("=")).contains("M")) {
+            String replacement = "";
+            String selection = "SELECT M FROM memory";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(selection);
+            if (rs.next()) {
+                replacement = mathExp.replace("M", rs.getString(1));
+            }
+            if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M+")) {
+                String onlyOperatorsAndOperands2 = replacement.substring(0, replacement.indexOf("="));
+                Expression expression2 = new ExpressionBuilder(onlyOperatorsAndOperands2).build();
+                String insertion2 = "INSERT INTO memory(M)" +
+                        "VALUES (?)";
+                PreparedStatement prest2 = connection.prepareStatement(insertion2);
+                prest2.setDouble(1, rs.getDouble(1) + expression2.evaluate());
+                prest2.executeUpdate();
+            }
+            else if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M-")) {
+                String onlyOperatorsAndOperands3 = replacement.substring(0, replacement.indexOf("="));
+                Expression expression3 = new ExpressionBuilder(onlyOperatorsAndOperands3).build();
+                String insertion3 = "INSERT INTO memory(M)" +
+                        "VALUES (?)";
+                PreparedStatement prest3 = connection.prepareStatement(insertion3);
+                prest3.setDouble(1, rs.getDouble(1) - expression3.evaluate());
+                prest3.executeUpdate();
             }
         }
+        connection.close();
     }
 
     public void selectMemoryResult() throws SQLException, ClassNotFoundException{
         double result;
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        Class.forName("org.h2.Driver");
+        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
         String selection = "SELECT M FROM memory ORDER BY id DESC LIMIT 1";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(selection);

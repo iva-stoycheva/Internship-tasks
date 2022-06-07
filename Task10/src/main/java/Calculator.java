@@ -14,7 +14,7 @@ public class Calculator {
             memoryService.insertResultFromCalculations(mathExp3);
 
             memoryService.selectMemoryResult();
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
