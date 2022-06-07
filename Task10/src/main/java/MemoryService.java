@@ -52,29 +52,27 @@ public class MemoryService {
                 if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M+")) {
                     String onlyOperatorsAndOperands2 = replacement.substring(0, replacement.indexOf("="));
                     Expression expression2 = new ExpressionBuilder(onlyOperatorsAndOperands2).build();
-
-                    String insertion3 = "INSERT INTO memory(M)" +
+                    String insertion2 = "INSERT INTO memory(M)" +
                             "VALUES (?)";
-                    PreparedStatement prest3 = connection.prepareStatement(insertion3);
-                    prest3.setDouble(1, rs.getDouble(1) + expression2.evaluate());
-                    prest3.executeUpdate();
+                    PreparedStatement prest2 = connection.prepareStatement(insertion2);
+                    prest2.setDouble(1, rs.getDouble(1) + expression2.evaluate());
+                    prest2.executeUpdate();
                 }
                 else if (mathExp.substring(mathExp.lastIndexOf("=") + 1).equals("M-")) {
-                    String onlyOperatorsAndOperands3 = mathExp.substring(0, mathExp.indexOf("="));
+                    String onlyOperatorsAndOperands3 = replacement.substring(0, replacement.indexOf("="));
                     Expression expression3 = new ExpressionBuilder(onlyOperatorsAndOperands3).build();
-                    String insertion5 = "INSERT INTO memory(M)" +
+                    String insertion3 = "INSERT INTO memory(M)" +
                             "VALUES (?)";
-                    String selection2 = "SELECT M FROM memory ORDER BY M DESC LIMIT 1";
-                    ResultSet resultSet = st.executeQuery(selection2);
-                    PreparedStatement prest5 = connection.prepareStatement(insertion5);
+                    String selection3 = "SELECT M FROM memory ORDER BY id DESC LIMIT 1";
+                    ResultSet resultSet = st.executeQuery(selection3);
+                    PreparedStatement prest3 = connection.prepareStatement(insertion3);
                     while (resultSet.next()) {
-                        prest5.setDouble(1, resultSet.getDouble(1) - expression3.evaluate());
-                        prest5.executeUpdate();
+                        prest3.setDouble(1, resultSet.getDouble(1) - expression3.evaluate());
+                        prest3.executeUpdate();
                     }
                 }
             }
         }
-        connection.close();
     }
 
     public void selectMemoryResult() throws SQLException, ClassNotFoundException{
