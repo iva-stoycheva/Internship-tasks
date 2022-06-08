@@ -4,25 +4,9 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import java.sql.*;
 import java.util.Scanner;
 public class MemoryService {
-    public static final String URL = "jdbc:h2:~/memory";
-    public static final String USER = "root";
-    public static final String PASSWORD = "123456";
     public String mathExpression;
-
     public static Connection connection;
     public static Statement statement;
-
-    static {
-        try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            statement = connection.createStatement();
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public String input() {
         System.out.println("Enter math expression to be calculated: ");
@@ -33,6 +17,7 @@ public class MemoryService {
     }
 
     public void insertIntoM(String mathExp) throws SQLException{
+        connection = DatabaseConnection.getConnection();
         double M;
         String onlyOperatorsAndOperands = mathExp.substring(0, mathExp.indexOf("="));
         Expression expression = new ExpressionBuilder(onlyOperatorsAndOperands).build();
@@ -47,11 +32,13 @@ public class MemoryService {
     }
 
     public void insertResultFromCalculationsMplus(String mathExp) throws SQLException{
+        connection = DatabaseConnection.getConnection();
         String leftSide = mathExp.substring(0, mathExp.indexOf("="));
         String rightSide = mathExp.substring(mathExp.indexOf("="));
         if (leftSide.contains("M")) {
             String replacement = "";
             String selection = "SELECT M FROM memory";
+            statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(selection);
             if (rs.next()) {
                 replacement = mathExp.replace("M", rs.getString(1));
@@ -69,6 +56,7 @@ public class MemoryService {
     }
 
     public void insertResultFromCalculationsMminus(String mathExp) throws SQLException{
+        connection = DatabaseConnection.getConnection();
         String rightSide = mathExp.substring(mathExp.indexOf("="));
         if (rightSide.contains("M-")) {
             String onlyOperatorsAndOperands3 = mathExp.substring(0, mathExp.indexOf("="));
@@ -87,6 +75,7 @@ public class MemoryService {
     }
 
     public void selectMemoryResult() throws SQLException{
+        connection = DatabaseConnection.getConnection();
         double result;
         String selection = "SELECT M FROM memory ORDER BY id DESC LIMIT 1";
         Statement st = connection.createStatement();
@@ -95,6 +84,5 @@ public class MemoryService {
            result = rs.getDouble(1);
            System.out.println(result);
         }
-        connection.close();
     }
 }
