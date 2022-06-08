@@ -9,6 +9,21 @@ public class MemoryService {
     public static final String PASSWORD = "123456";
     public String mathExpression;
 
+    public static Connection connection;
+    public static Statement statement;
+
+    static {
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            statement = connection.createStatement();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String input() {
         System.out.println("Enter math expression to be calculated: ");
         mathExpression = "";
@@ -17,9 +32,7 @@ public class MemoryService {
         return mathExpression;
     }
 
-    public void insertIntoM(String mathExp) throws SQLException, ClassNotFoundException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+    public void insertIntoM(String mathExp) throws SQLException{
         double M;
         String onlyOperatorsAndOperands = mathExp.substring(0, mathExp.indexOf("="));
         Expression expression = new ExpressionBuilder(onlyOperatorsAndOperands).build();
@@ -31,19 +44,15 @@ public class MemoryService {
             prest.setDouble(1, M);
             prest.executeUpdate();
         }
-        connection.close();
     }
 
-    public void insertResultFromCalculationsMplus(String mathExp) throws SQLException, ClassNotFoundException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+    public void insertResultFromCalculationsMplus(String mathExp) throws SQLException{
         String leftSide = mathExp.substring(0, mathExp.indexOf("="));
         String rightSide = mathExp.substring(mathExp.indexOf("="));
         if (leftSide.contains("M")) {
             String replacement = "";
             String selection = "SELECT M FROM memory";
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(selection);
+            ResultSet rs = statement.executeQuery(selection);
             if (rs.next()) {
                 replacement = mathExp.replace("M", rs.getString(1));
             }
@@ -57,13 +66,9 @@ public class MemoryService {
                 prest2.executeUpdate();
             }
         }
-        connection.close();
     }
 
-    public void insertResultFromCalculationsMminus(String mathExp) throws SQLException, ClassNotFoundException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        String leftSide = mathExp.substring(0, mathExp.indexOf("="));
+    public void insertResultFromCalculationsMminus(String mathExp) throws SQLException{
         String rightSide = mathExp.substring(mathExp.indexOf("="));
         if (rightSide.contains("M-")) {
             String onlyOperatorsAndOperands3 = mathExp.substring(0, mathExp.indexOf("="));
@@ -79,14 +84,10 @@ public class MemoryService {
                 prest3.executeUpdate();
             }
         }
-        connection.close();
     }
 
-
-    public void selectMemoryResult() throws SQLException, ClassNotFoundException{
+    public void selectMemoryResult() throws SQLException{
         double result;
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
         String selection = "SELECT M FROM memory ORDER BY id DESC LIMIT 1";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(selection);
