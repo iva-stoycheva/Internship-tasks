@@ -14,29 +14,19 @@ public class SocketClient {
             System.out.println("Connected");
 
             input = new DataInputStream(System.in);
-
             output = new DataOutputStream(socket.getOutputStream());
-        } catch (UnknownHostException u) {
-            u.printStackTrace();
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
 
-        String line = "";
-
-        try {
+            String line = "";
             line = input.readLine();
             byte[] content = line.getBytes(StandardCharsets.UTF_8);
             output.writeInt(content.length);
             output.write(content);
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
 
-        try {
             input.close();
             output.close();
             socket.close();
+        } catch (UnknownHostException u) {
+            u.printStackTrace();
         } catch (IOException i) {
             i.printStackTrace();
         }

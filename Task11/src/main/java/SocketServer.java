@@ -23,16 +23,12 @@ public class SocketServer {
 
             in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
-            try {
-                int length = in.readInt();
-                byte[] content = new byte[length];
-                in.read(content, 0, length);
-                String received = new String(content, StandardCharsets.UTF_8);
-                Expression expression = new ExpressionBuilder(received).build();
-                System.out.println((received + " = " + expression.evaluate()));
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            int length = in.readInt();
+            byte[] content = new byte[length];
+            in.read(content, 0, length);
+            String received = new String(content, StandardCharsets.UTF_8);
+            Expression expression = new ExpressionBuilder(received).build();
+            System.out.println((received + " = " + expression.evaluate()));
 
             socket.close();
             in.close();
