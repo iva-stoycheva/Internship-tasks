@@ -12,15 +12,17 @@ public class SocketServer {
     private DataInputStream in = null;
 
     public SocketServer(int port) throws IOException {
+        server = new ServerSocket(port);
+        System.out.println("Server started");
+
+        System.out.println("Waiting for a client");
+
+        socket = server.accept();
+        System.out.println("Client accepted");
+    }
+
+    public void receiveData(){
         try {
-            server = new ServerSocket(port);
-            System.out.println("Server started");
-
-            System.out.println("Waiting for a client");
-
-            socket = server.accept();
-            System.out.println("Client accepted");
-
             in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
             int length = in.readInt();
@@ -29,16 +31,25 @@ public class SocketServer {
             String received = new String(content, StandardCharsets.UTF_8);
             Expression expression = new ExpressionBuilder(received).build();
             System.out.println((received + " = " + expression.evaluate()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
-            socket.close();
+    public void close(){
+        try {
             in.close();
-
-        } catch (IOException i) {
-            i.printStackTrace();
+            socket.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) throws IOException{
         SocketServer socketServer = new SocketServer(3307);
+        socketServer.receiveData();
+        socketServer.close();
     }
 }
