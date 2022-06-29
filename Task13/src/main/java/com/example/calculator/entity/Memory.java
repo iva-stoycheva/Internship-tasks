@@ -1,5 +1,7 @@
 package com.example.calculator.entity;
+
 import lombok.ToString;
+
 import javax.persistence.*;
 
 @ToString

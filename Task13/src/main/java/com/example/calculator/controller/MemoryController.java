@@ -20,4 +20,14 @@ public class MemoryController {
     private Memory getNumber(@PathVariable("id") Long id) {
         return service.getNumberById(id);
     }
+
+    @GetMapping("/add/number/{id}")
+    private Double add(@PathVariable("id") Long id) {
+        return service.getNumberById(id).getNumber() + 10;
+    }
+
+    @GetMapping("/subtract/number/{id}")
+    private Double subtract(@PathVariable("id") Long id) {
+        return service.getNumberById(id).getNumber() - 3;
+    }
 }
