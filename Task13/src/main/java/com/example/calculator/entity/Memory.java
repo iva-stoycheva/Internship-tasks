@@ -1,27 +1,33 @@
 package com.example.calculator.entity;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Getter
-@Setter
-@NoArgsConstructor
 @ToString
 @Entity
 public class Memory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private Double result;
-    public Memory(Double result) {
-        this.result = result;
+    private Double number;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Double getNumber() {
+        return number;
+    }
+
+    public Memory() {
+    }
+
+    public Memory(Double number) {
+        this.number = number;
+    }
+
+    public Memory(Long id, Double number) {
+        this.id = id;
+        this.number = number;
     }
 }
