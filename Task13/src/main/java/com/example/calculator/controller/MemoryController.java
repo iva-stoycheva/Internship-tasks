@@ -1,5 +1,6 @@
 package com.example.calculator.controller;
 
+import com.example.calculator.dto.MemoryDTO;
 import com.example.calculator.entity.Memory;
 import com.example.calculator.service.MemoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,19 @@ public class MemoryController {
         return service.getNumberById(id);
     }
 
-    @GetMapping("/add/number/{id}")
-    private Double add(@PathVariable("id") Long id) {
-        return service.getNumberById(id).getNumber() + 10;
-    }
-
-    @GetMapping("/subtract/number/{id}")
-    private Double subtract(@PathVariable("id") Long id) {
-        return service.getNumberById(id).getNumber() - 3;
+    @PutMapping("/number/{id}")
+    private Double operate(@PathVariable("id") Long id, @RequestBody MemoryDTO change) {
+        Memory memory = service.getNumberById(id);
+        if (change.operation.equals("+")) {
+            memory.setNumber(memory.getNumber() + change.value);
+        }
+        else if(change.operation.equals("-")) {
+            memory.setNumber(memory.getNumber() - change.value);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        service.save(memory);
+        return memory.getNumber();
     }
 }

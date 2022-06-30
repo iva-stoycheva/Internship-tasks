@@ -21,6 +21,14 @@ public class Memory {
         return number;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNumber(Double number) {
+        this.number = number;
+    }
+
     public Memory() {
     }
 
